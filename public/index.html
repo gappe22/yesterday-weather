@@ -1,0 +1,158 @@
+<!-- TODO: more rankings -->
+<!-- TODO: fun facts about cities -->
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meteo di Ieri</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    let chart = null;
+    
+    function getWeather() {
+        // Show loading bar
+        document.getElementById('loading-bar').style.display = 'block';
+        document.getElementById('weather-result').innerHTML = '';
+        
+        // Simulate API call with timeout
+        setTimeout(function() {
+            // Mock data
+            const mockData = {
+                success: true,
+                avg_temp: 18.8,
+                hours: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
+                temps: [8.2, 7.9, 7.5, 7.1, 6.8, 6.5, 6.3, 8.1, 10.5, 13.2, 15.8, 18.1, 20.3, 22.1, 23.5, 24.2, 23.8, 22.5, 20.1, 17.8, 15.3, 12.6, 10.4, 9.1]
+            };
+            
+            // Hide loading bar
+            document.getElementById('loading-bar').style.display = 'none';
+            
+            if (mockData.success) {
+                document.getElementById('weather-result').innerHTML =
+                    `<p>Temperatura media di ieri: ${mockData.avg_temp}°C</p><canvas id="tempChart"></canvas>`;
+                
+                // Destroy previous chart if exists
+                if (chart) {
+                    chart.destroy();
+                }
+                
+                // Create new chart
+                const ctx = document.getElementById('tempChart').getContext('2d');
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: mockData.hours,
+                        datasets: [{
+                            label: 'Temperatura (°C)',
+                            data: mockData.temps,
+                            borderColor: '#8b5a8b',
+                            backgroundColor: 'transparent',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0,
+                            pointBackgroundColor: '#8b3a3a',
+                            pointBorderColor: '#333',
+                            pointBorderWidth: 2,
+                            pointRadius: 5
+                        }]
+                    },
+                    options: {
+                        animation: false,
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                ticks: {
+                                    font: { family: "'Bebas Neue', Impact, sans-serif", size: 12, weight: 'bold' },
+                                    color: '#333'
+                                },
+                                grid: {
+                                    color: '#ccc'
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    font: { family: "'Bebas Neue', Impact, sans-serif", size: 12, weight: 'bold' },
+                                    color: '#333'
+                                },
+                                grid: {
+                                    color: '#eee'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }, 1500); // Simulate API delay
+    }
+    </script>
+</head>
+<body onload="getWeather()">
+    <div class="wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">getting around</div>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#rankings">Rankings</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <h1>Meteo di ieri</h1>
+            <div id="weather-result"></div>
+            <div id="loading-bar" class="loading-bar" style="display: none;">
+                <div class="loading-bar-fill"></div>
+            </div>
+        </div>
+        <aside class="right-sidebar">
+            <div class="sidebar-header">hottest countries</div>
+            <div class="countries-list">
+                <div class="country-item">
+                    <div class="country-rank">1</div>
+                    <div class="country-info">
+                        <div class="country-name">Kuwait</div>
+                        <div class="country-temp">54°C</div>
+                    </div>
+                </div>
+                <div class="country-item">
+                    <div class="country-rank">2</div>
+                    <div class="country-info">
+                        <div class="country-name">Iraq</div>
+                        <div class="country-temp">53°C</div>
+                    </div>
+                </div>
+                <div class="country-item">
+                    <div class="country-rank">3</div>
+                    <div class="country-info">
+                        <div class="country-name">Egypt</div>
+                        <div class="country-temp">51°C</div>
+                    </div>
+                </div>
+                <div class="country-item">
+                    <div class="country-rank">4</div>
+                    <div class="country-info">
+                        <div class="country-name">Saudi Arabia</div>
+                        <div class="country-temp">50°C</div>
+                    </div>
+                </div>
+                <div class="country-item">
+                    <div class="country-rank">5</div>
+                    <div class="country-info">
+                        <div class="country-name">United Arab Emirates</div>
+                        <div class="country-temp">49°C</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</body>
+</html>
